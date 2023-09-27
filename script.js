@@ -1,37 +1,65 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const taskInput = document.getElementById("task");
-  const addTaskButton = document.getElementById("addTask");
-  const taskList = document.getElementById("taskList");
+    const taskInput = document.getElementById("task");
+    const addTaskButton = document.getElementById("addTask");
+    const taskList = document.getElementById("taskList");
 
-  addTaskButton.addEventListener("click", function () {
-      const taskText = taskInput.value.trim();
+    addTaskButton.addEventListener("click", function () {
+        const taskText = taskInput.value.trim();
+        const prioritySelect = document.getElementById("priority"); // Add an ID to your priority selector
 
-      if (taskText !== "") {
-          const li = document.createElement("li");
-          li.innerHTML = `
-              ${taskText}
-              <button class="delete-button">Delete</button>
-          `;
+        if (taskText !== "") {
+            const li = document.createElement("li");
+            const selectedPriority = prioritySelect.value; // Get the selected priority
 
-          li.classList.add("grid-item"); // Add the grid-item class for animation
+            li.innerHTML = `
+                ${taskText} (Priority: ${selectedPriority})
+                <button class="delete-button">Delete</button>
+            `;
 
-          li.querySelector(".delete-button").addEventListener("click", function () {
-              const confirmation = confirm("Are you sure , completed this task?");
-              if (confirmation) {
-                  li.classList.add("removed"); // Add the removed class for animation
-                  setTimeout(() => {
-                      li.remove(); // Remove the element after the animation completes
-                  }, 300); // Match the animation duration (0.3s)
-              }
-          });
+            li.classList.add("grid-item");
 
-          taskList.appendChild(li);
-          taskInput.value = "";
+            li.querySelector(".delete-button").addEventListener("click", function () {
+                const confirmation = confirm("Are you sure you want to delete this task?");
+                if (confirmation) {
+                    li.classList.add("removed");
+                    setTimeout(() => {
+                        li.remove();
+                    }, 300);
+                }
+            });
 
-          // Trigger a reflow to apply the animation
-          setTimeout(() => {
-              li.classList.add("added"); // Add the added class for animation
-          }, 0);
-      }
-  });
+            taskList.appendChild(li);
+            taskInput.value = "";
+            prioritySelect.value = "low"; // Reset the priority selector
+            setTimeout(() => {
+                li.classList.add("added");
+            }, 0);
+
+            sortTasks(); // Sort the tasks by priority
+        }
+    });
+
+    // Function to sort tasks by priority
+    function sortTasks() {
+        const tasks = [...taskList.querySelectorAll(".grid-item")];
+        tasks.sort((a, b) => {
+            const priorityA = a.querySelector(".priority").value;
+            const priorityB = b.querySelector(".priority").value;
+            return priorityA.localeCompare(priorityB);
+        });
+
+        // Remove all tasks from the list and re-append them in the sorted order
+        taskList.innerHTML = "";
+        tasks.forEach(task => {
+            taskList.appendChild(task);
+        });
+    }
+});
+
+// When adding a new task, assign a CSS class based on priority
+addTaskButton.addEventListener("click", function () {
+    // ...
+    li.classList.add("grid-item");
+    li.classList.add(`${selectedPriority}-priority`); // Add the priority class
+    // ...
 });

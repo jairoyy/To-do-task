@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="icon.png">
     <title>To-Do List</title>
@@ -15,9 +15,13 @@
             <button id="addTask">Add</button>
         </div>
         <ul id="taskList" class="grid-container">
-          <!-- Tasks will be added here dynamically -->
-      </ul>
-      
+           
+        </ul>
+        <select id="priority" class="priority">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+        </select>
     </div>
     <script src="script.js"></script>
 </body>
